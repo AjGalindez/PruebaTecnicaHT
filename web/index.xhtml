@@ -1,0 +1,101 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Mascotas</title>
+    </h:head>
+    <h:body>
+        <p:growl id="mensajes" showDetail="true" life="2000"/>
+        <h:form id="form">
+            <p:panel id="panel" header="Gestionar Mascota" style="width: 500px" >
+                <h:panelGrid columns="2" cellpadding="5" id="panelGrid">
+                    <h:outputLabel for="idmascota" value="ID mascota"/>
+                    <p:inputText value="#{mascotaBean.id}" id="idmascota"
+                                  label="idmascota"/>
+                    <h:outputLabel for="nombremascota" value="Nombre Mascota"/>
+                    <p:inputText value="#{mascotaBean.nombre}" id="nombremascota"
+                                  label="nombremascota"/>
+                    <h:outputLabel for="raza" value="Raza:"/>
+                    <p:inputText value="#{mascotaBean.raza}" id="raza" 
+                                 label="raza"/>
+                    <h:outputLabel for="edad" value="Edad:"/>
+                    <p:inputText value="#{mascotaBean.edad}" id="edad"
+                                 label="edad"/>
+                    <f:facet name="footer">
+                        <p:commandButton id="btnGuardar" value="Guardar"
+                                         actionListener="#{mascotaBean.guardar}" update=":mensajes" 
+                                         oncomplete="manejarMascota(xhr,status,args)"/>
+                    </f:facet>
+                    <f:facet name="footer">
+                        <p:commandButton id="btnBuscar" value="Buscar"
+                                         actionListener="#{mascotaBean.buscar}"
+                                         update="panel"
+                                         >
+
+                        </p:commandButton>
+                    </f:facet>
+                    <f:facet name="footer">
+                        <p:commandButton id="btnModificar" value="Modificar"
+                                         actionListener="#{mascotaBean.modificar}" 
+                                         >
+                            
+                        </p:commandButton>
+                    </f:facet>
+                </h:panelGrid>
+            </p:panel>
+        </h:form>
+        <h:form>
+
+            <p:dataTable id="tablaDeDatos" var="mascota"
+                         value="#{mascotaBean.mascotas}" widgetVar="tablaDeMascotas"
+                         emptyMessage="NO hay mascotas registradas"
+                         rowIndexVar="rowIndex"
+                         filteredValue="#{mascotaBean.mascotasFiltradas}"
+                         paginator="true"
+                         rows="10" style="width:1000px">
+
+                <p:column id="idMascota" headerText="ID"
+                          filterMatchMode="exact" >
+                    <h:outputText value="#{mascota.id}" />
+
+                </p:column>
+                <p:column id="nombreCol"
+                          headerText="Nombre" filterMatchMode="startsWith">
+                    <h:outputText value="#{mascota.nombre}" />
+                </p:column>
+                <p:column id="razaCol"  headerText="Raza"
+                          filterMatchMode="startsWith">
+                    <h:outputText value="#{mascota.raza}" />
+                </p:column>
+                <p:column id="edadCol" headerText="Edad"
+                          filterMatchMode="exact">
+                    <h:outputText value="#{mascota.edad}" />
+                </p:column>
+                <p:column>
+                    <p:commandButton id="buttonEliminar" value="Eliminar" 
+                                     actionListener="#{mascotaBean.eliminar(rowIndex)}"
+                                     update="tablaDeDatos"
+                                     oncomplete="manejarMascota(xhr,status,args)">
+
+
+                    </p:commandButton>
+                </p:column>
+            </p:dataTable>
+        </h:form>
+    </h:body>
+    <script type="text/javascript">
+        //<![CDATA[
+        function manejarMascota(xhr, status, args) {
+        if (!args.validationFailed) {
+        setTimeout(function ()){
+        window.location = args.view;
+        }, 100
+        }
+        }
+    //]]>
+    </script>
+</html>
+
